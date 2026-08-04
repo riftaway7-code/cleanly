@@ -1,62 +1,69 @@
-# usage
+# Command reference
 
-## basic
-
-```bash
-cleanly .                    # sort current directory
-cleanly ~/Downloads          # sort a specific folder
-```
-
-## flags
-
-### `-c` — filter by category
-
-only sort specific categories:
+## Organize
 
 ```bash
-cleanly . -c "images audio"
-cleanly . -c "documents"
+cleanly preview [PATH] [OPTIONS]
+cleanly clean [PATH] [OPTIONS]
+cleanly [PATH] [OPTIONS]
 ```
 
-category names are case insensitive. `Images`, `images`, and `IMAGES` all work.
+Options:
 
-### `--no-clean`
+- `-c, --category LIST` limits sorting to named categories.
+- `--include-hidden` includes hidden entries for one run.
+- `--exclude-hidden` excludes hidden entries for one run.
+- `--folders` organizes loose directories under `Folders`.
+- `--no-folders` leaves loose directories untouched.
+- `-y, --yes` accepts the recoverable move confirmation.
 
-skip the cleanup verification step after sorting. useful if you want speed over safety:
+## Maintain
 
 ```bash
-cleanly . --no-clean
+cleanly duplicates [PATH] [--trash] [--include-hidden] [--yes]
+cleanly empty [PATH] [--trash] [--include-hidden] [--yes]
+cleanly large [PATH] [--size MB] [--trash] [--include-hidden] [--yes]
+cleanly old [PATH] [--days DAYS] [--trash] [--include-hidden] [--yes]
 ```
 
-### `--undo`
+Without `--trash`, every maintenance command is read-only.
 
-reverse the last sort run. restores all files to their original locations and removes the folders that were created:
+## Remove
 
 ```bash
-cleanly --undo
+cleanly remove [PATH] --extension LIST
+cleanly remove [PATH] --category LIST
 ```
 
-### `-v` / `version`
+Add `--permanent` only when Trash recovery is intentionally unwanted.
 
-print the current version:
+## Recover and inspect
 
 ```bash
-cleanly -v
-cleanly version
+cleanly undo
+cleanly history [--limit NUMBER]
 ```
 
-### `update`
+## Configure
 
-update cleanly to the latest version:
+```bash
+cleanly settings show
+cleanly settings get KEY
+cleanly settings set KEY VALUE
+cleanly settings category list
+cleanly settings category add NAME EXTENSION...
+cleanly settings reset
+```
+
+## Utility
 
 ```bash
 cleanly update
+cleanly version
+cleanly --version
+cleanly -v
+cleanly help [COMMAND]
+cleanly COMMAND --help
 ```
 
-### `help`
-
-print usage information:
-
-```bash
-cleanly help
-```
+Successful commands return status `0`, cancelled confirmations return `2`, and errors or partial failures return `1`.

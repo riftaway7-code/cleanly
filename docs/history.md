@@ -1,21 +1,17 @@
-# history & undo
+# History and undo
 
-## how history works
+cleanly stores operation history at `~/.cleanly/data/history.json`. The file is JSON and is written atomically.
 
-every time you run `cleanly`, it saves a record of every file that was moved to:
-
-```
-~/.cleanly/data/history.json
-```
-
-each run is stored as an entry with a timestamp and a list of file moves:
+Each run contains a timestamp, command label, and completed entries:
 
 ```json
 [
   {
-    "time": "2025-01-01T12:00:00Z",
+    "command": "clean",
+    "time": "2026-08-03T12:00:00.000Z",
     "entries": [
       {
+        "action": "move",
         "from": "/Users/you/Downloads/photo.jpg",
         "to": "/Users/you/Downloads/Images/photo.jpg"
       }
@@ -24,18 +20,27 @@ each run is stored as an entry with a timestamp and a list of file moves:
 ]
 ```
 
-## undoing a sort
+Legacy Go history entries without `command` or `action` remain readable.
 
-to reverse the last sort:
+## Inspect history
 
 ```bash
-cleanly --undo
+cleanly history
+cleanly history --limit 25
 ```
 
-this moves every file back to where it came from and removes any folders that are now empty.
+## Undo
 
-only the most recent run is undone at a time. run `--undo` multiple times to go further back.
+```bash
+cleanly undo
+```
 
-## remove history
+Before changing anything, undo verifies that every recoverable destination still exists and every original location is free. It then restores entries in reverse order. If a restore fails, already-restored entries are moved back so the run remains consistent.
 
-`cleanly remove` also saves to history, with one difference — permanently deleted files (`-p`) are recorded as `PERMANENT` and cannot be undone.
+Trash entries can be restored as long as their recorded Trash paths still exist. Entries with destination `PERMANENT` are skipped because their data no longer exists.
+
+The number of retained runs is controlled by `history.limit`:
+
+```bash
+cleanly settings set history.limit 200
+```

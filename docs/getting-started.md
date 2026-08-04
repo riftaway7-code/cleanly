@@ -1,38 +1,41 @@
-# getting started
+# Getting started
 
-## install
+## Install on macOS
 
-**homebrew**
 ```bash
 brew install thecatthatflies/tap/cleanly
 ```
 
-**go install**
+cleanly requires macOS 13 or newer. It is implemented entirely in Swift.
+
+## Preview your first clean
+
 ```bash
-go install github.com/thecatthatflies/cleanly@latest
+cleanly preview ~/Downloads
 ```
 
-**manual**
+The preview labels the directory, operating mode, number of planned moves, and destination for every item. It does not change files.
+
+## Apply the plan
+
 ```bash
-git clone https://github.com/thecatthatflies/cleanly
-cd cleanly
-chmod +x scripts/install.sh
-./scripts/install.sh
+cleanly clean ~/Downloads
 ```
 
-## your first sort
+Review the plan, then answer the confirmation prompt. Use `cleanly settings set confirmations strict` if you prefer typed confirmations.
 
-navigate to the folder you want to sort:
+## Reverse the movement
 
 ```bash
-cd ~/Downloads
-cleanly .
+cleanly undo
 ```
 
-cleanly will create subfolders like `Images/`, `Documents/`, `Video/` and move your files into them.
+Only the latest recorded operation is reversed at a time.
 
-to reverse it:
+## Learn the rest
 
 ```bash
-cleanly --undo
+cleanly help
+cleanly help clean
+cleanly help settings
 ```

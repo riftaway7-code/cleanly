@@ -1,15 +1,22 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
-echo "installing cleanly..."
-go build -o cleanly .
+project_dir="$(cd "$(dirname "$0")/.." && pwd)"
+install_prefix="${INSTALL_PREFIX:-/usr/local}"
+install_dir="$install_prefix/bin"
+binary="$project_dir/.build/release/cleanly"
 
-echo "installing to /usr/local/bin..."
-sudo mv cleanly /usr/local/bin/cleanly
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo "Error: cleanly supports macOS only."
+    exit 1
+fi
 
-echo "creating config directory..."
-mkdir -p ~/.cleanly/data
-cp data/history.json ~/.cleanly/data/history.json 2>/dev/null || echo "[]" > ~/.cleanly/data/history.json
+echo "Build: Compiling cleanly in release mode."
+swift build --package-path "$project_dir" --configuration release
 
-echo "cleanly installed. run 'cleanly help' to get started."
+echo "Install: Copying cleanly to $install_dir."
+sudo mkdir -p "$install_dir"
+sudo install -m 0755 "$binary" "$install_dir/cleanly"
+
+echo "Result: cleanly installed. Run 'cleanly help' to get started."

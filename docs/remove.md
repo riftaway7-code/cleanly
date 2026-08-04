@@ -1,42 +1,33 @@
-# remove
+# Remove files
 
-the `remove` subcommand deletes files from the current directory by extension or category.
-
-## by extension
+`cleanly remove` selects immediate files by extension, category, or both. It prints every match before asking for confirmation.
 
 ```bash
-cleanly remove -f png jpeg gif
+cleanly remove ~/Downloads --extension png,jpeg,gif
+cleanly remove ~/Downloads --category Images,Archives
 ```
 
-removes all `.png`, `.jpeg`, and `.gif` files in the current directory.
+`-f` is the short form of `--extension`; `-c` is the short form of `--category`.
 
-## by category
+## Trash by default
+
+Selected files go through the native macOS Trash API and are recorded for `cleanly undo`.
 
 ```bash
-cleanly remove -c images audio
+cleanly remove ~/Downloads -f dmg,pkg
+cleanly undo
 ```
 
-removes all files that belong to the `images` or `audio` categories.
-
-## trash vs permanent
-
-by default, files are moved to `~/.Trash` so you can recover them if needed.
-
-to permanently delete instead:
+## Permanent deletion
 
 ```bash
-cleanly remove -f png -p
-cleanly remove -c images --permanent
+cleanly remove ~/Downloads --extension tmp --permanent
 ```
 
-permanently deleted files cannot be undone.
+The command requires the exact word `DELETE`. `--yes` alone cannot bypass this protection. A noninteractive permanent deletion must specify:
 
-## confirmation
-
-cleanly will always ask for confirmation before removing files:
-
-```
-about to delete 12 files. are you sure? [y/N]
+```bash
+cleanly remove ~/Downloads --extension tmp --permanent --yes --confirm-permanent DELETE
 ```
 
-type `y` to confirm.
+Permanently deleted files cannot be restored. They are still recorded so history accurately describes what happened.

@@ -1,10 +1,11 @@
-# cleanly docs
+# cleanly documentation
 
-## pages
-
-- [getting started](./getting-started.md)
-- [usage](./usage.md)
-- [categories](./categories.md)
-- [history & undo](./history.md)
-- [remove](./remove.md)
-- [contributing](./contributing.md)
+- [Getting started](./getting-started.md)
+- [Command reference](./usage.md)
+- [Categories](./categories.md)
+- [Maintenance tools](./maintenance.md)
+- [Settings](./settings.md)
+- [Safety](./safety.md)
+- [History and undo](./history.md)
+- [Remove files](./remove.md)
+- [Contributing](./contributing.md)
